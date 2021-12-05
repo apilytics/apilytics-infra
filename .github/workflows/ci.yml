@@ -1,0 +1,90 @@
+name: "CI"
+
+on: pull_request
+
+concurrency:
+  group: ci-${{ github.head_ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: terraform
+
+jobs:
+  plan-infra:
+    name: "Plan Infra"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout code (pre merge)"
+        uses: actions/checkout@v2
+        with:
+          # Checkout the current commit instead of the commit that would get
+          # made when the PR would be merged, since we want to validate that
+          # the branch doesn't contain any merge commits and is rebased correctly.
+          # We also fetch all the objects here so that we can do the comparisons.
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: "Check commits of the PR branch"
+        run: ../.github/check_commits.sh
+
+      - name: "Checkout code (post merge)"
+        uses: actions/checkout@v2
+
+      - name: "Configure AWS credentials"
+        uses: aws-actions/configure-aws-credentials@ea7b857d8a33dc2fb4ef5a724500044281b49a5e  # v1.6.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@3d8debd658c92063839bc97da5c2427100420dec  # 1.3.2
+
+      - name: "Terraform fmt"
+        id: fmt
+        run: terraform fmt -recursive -check -diff
+
+      - name: "Terraform init"
+        id: init
+        run: terraform init
+
+      - name: "Terraform validate"
+        id: validate
+        run: terraform validate -no-color
+
+      - name: "Terraform plan"
+        id: plan
+        run: terraform plan -no-color -input=false
+        env:
+          TF_VAR_landing_page_prod_postgres_dbname: ${{ secrets.TF_VAR_landing_page_prod_postgres_dbname }}
+          TF_VAR_landing_page_prod_postgres_username: ${{ secrets.TF_VAR_landing_page_prod_postgres_username }}
+          TF_VAR_landing_page_prod_postgres_password: ${{ secrets.TF_VAR_landing_page_prod_postgres_password }}
+
+      - name: "Show plan info in the PR"
+        uses: actions/github-script@v5
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`${process.env.PLAN}\`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
