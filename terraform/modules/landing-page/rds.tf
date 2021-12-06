@@ -18,7 +18,7 @@ resource "aws_db_instance" "this" {
   maintenance_window        = "Mon:03:30-Mon:04:00"
   backup_retention_period   = 14
 
-  deletion_protection = false
+  deletion_protection = true
 }
 
 resource "aws_db_subnet_group" "this" {
