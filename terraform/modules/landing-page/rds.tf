@@ -2,7 +2,7 @@ resource "aws_db_instance" "this" {
   identifier        = "${var.name}-rds"
   name              = var.postgres_dbname
   engine            = "postgres"
-  engine_version    = "13.4"
+  engine_version    = "12.8"
   instance_class    = "db.t2.micro"
   allocated_storage = 20
   storage_type      = "gp2"
