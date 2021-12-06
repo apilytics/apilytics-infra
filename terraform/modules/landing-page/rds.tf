@@ -11,14 +11,14 @@ resource "aws_db_instance" "this" {
 
   db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.this.id]
-  publicly_accessible    = false
+  publicly_accessible    = true
 
   final_snapshot_identifier = "${var.name}-final-snapshot"
   backup_window             = "03:00-03:30"
   maintenance_window        = "Mon:03:30-Mon:04:00"
   backup_retention_period   = 14
 
-  deletion_protection = false
+  deletion_protection = true
 }
 
 resource "aws_db_subnet_group" "this" {
