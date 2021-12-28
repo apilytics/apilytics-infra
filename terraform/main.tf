@@ -11,6 +11,8 @@ terraform {
     bucket  = "apilytics-terraform-state"
     key     = "terraform.tfstate"
     encrypt = true
+    // The lock table has been created manually outside of terraform.
+    dynamodb_table = "apilytics-terraform-lock"
   }
 }
 
