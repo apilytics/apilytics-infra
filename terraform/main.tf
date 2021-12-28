@@ -27,8 +27,8 @@ module "landing_page_prod" {
 
   name = "${local.name}-prod-landing-page"
 
-  vpc_cidr_block = "10.0.0.0/16"
-  public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  vpc_cidr_block            = "10.0.0.0/16"
+  public_subnet_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 
   postgres_dbname   = var.landing_page_prod_postgres_dbname
   postgres_username = var.landing_page_prod_postgres_username

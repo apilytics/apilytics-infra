@@ -23,5 +23,5 @@ resource "aws_db_instance" "this" {
 
 resource "aws_db_subnet_group" "this" {
   name       = "${var.name}-rds-subnet-group"
-  subnet_ids = [aws_subnet.a.id, aws_subnet.b.id, aws_subnet.c.id]
+  subnet_ids = values(aws_subnet.public)[*].id
 }
