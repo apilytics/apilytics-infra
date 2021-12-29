@@ -4,6 +4,6 @@ resource "aws_sns_topic" "ses_bounces" {
 
 resource "aws_sns_topic_subscription" "ses_bounces" {
   endpoint  = local.alert_email
-  protocol  = "email-json"
+  protocol  = "email"
   topic_arn = aws_sns_topic.ses_bounces.arn
 }
