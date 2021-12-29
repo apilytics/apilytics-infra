@@ -20,7 +20,7 @@ terraform {
 
 locals {
   name        = "apilytics"
-  alert_email = "hello@apilytics.io"
+  alert_email = "alert@apilytics.io"
 }
 
 module "landing_page_prod" {
