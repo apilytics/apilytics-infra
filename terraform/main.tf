@@ -19,7 +19,8 @@ terraform {
 // The IAM user that the repo is using has been created manually outside of Terraform.
 
 locals {
-  name = "apilytics"
+  name        = "apilytics"
+  alert_email = "hello@apilytics.io"
 }
 
 module "landing_page_prod" {
