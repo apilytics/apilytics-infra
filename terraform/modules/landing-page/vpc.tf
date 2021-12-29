@@ -20,36 +20,19 @@ resource "aws_internet_gateway" "this" {
   }
 }
 
-resource "aws_subnet" "a" {
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = var.public_subnets[0]
-  availability_zone       = data.aws_availability_zones.available.names[0]
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "${var.name}-subnet-a"
+resource "aws_subnet" "public" {
+  for_each = {
+    for i, cidr_block in var.public_subnet_cidr_blocks :
+    data.aws_availability_zones.available.names[i] => cidr_block
   }
-}
 
-resource "aws_subnet" "b" {
   vpc_id                  = aws_vpc.this.id
-  cidr_block              = var.public_subnets[1]
-  availability_zone       = data.aws_availability_zones.available.names[1]
+  cidr_block              = each.value
+  availability_zone       = each.key
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.name}-subnet-b"
-  }
-}
-
-resource "aws_subnet" "c" {
-  vpc_id                  = aws_vpc.this.id
-  cidr_block              = var.public_subnets[2]
-  availability_zone       = data.aws_availability_zones.available.names[2]
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name = "${var.name}-subnet-c"
+    Name = "${var.name}-public-subnet-${substr(each.key, -1, 1)}"
   }
 }
 
@@ -66,18 +49,9 @@ resource "aws_route_table" "this" {
   }
 }
 
-resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.a.id
-  route_table_id = aws_route_table.this.id
-}
-
-resource "aws_route_table_association" "b" {
-  subnet_id      = aws_subnet.b.id
-  route_table_id = aws_route_table.this.id
-}
-
-resource "aws_route_table_association" "c" {
-  subnet_id      = aws_subnet.c.id
+resource "aws_route_table_association" "this" {
+  for_each       = aws_subnet.public
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.this.id
 }
 
