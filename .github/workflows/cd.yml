@@ -30,8 +30,16 @@ jobs:
         id: init
         run: terraform init
 
+      - name: "Set TFPLAN variable"
+        run: echo "TFPLAN=$(git rev-parse HEAD^@ | tail -1).tfplan" >> $GITHUB_ENV
+
+      - name: "Fetch the stored plan from S3"
+        # No need to delete the plan file from S3. Our CI workflow will anyways leave lots of
+        # those lying around, and it also doesn't hurt that this can be re-ran any amount of times.
+        run: aws s3 cp "s3://apilytics-terraform-state/plans/${TFPLAN}" .
+
       - name: "Terraform apply"
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false "$TFPLAN"
         env:
           TF_VAR_landing_page_prod_postgres_dbname: ${{ secrets.TF_VAR_landing_page_prod_postgres_dbname }}
           TF_VAR_landing_page_prod_postgres_username: ${{ secrets.TF_VAR_landing_page_prod_postgres_username }}
