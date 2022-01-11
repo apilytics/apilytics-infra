@@ -7,16 +7,12 @@ terraform {
   }
 
   backend "s3" {
-    // The state bucket has been created manually outside of terraform.
-    bucket  = "apilytics-terraform-state"
-    key     = "terraform.tfstate"
-    encrypt = true
-    // The lock table has been created manually outside of terraform.
+    bucket         = "apilytics-terraform-state"
+    key            = "terraform.tfstate"
+    encrypt        = true
     dynamodb_table = "apilytics-terraform-lock"
   }
 }
-
-// The IAM user that the repo is using has been created manually outside of Terraform.
 
 locals {
   name = "apilytics"

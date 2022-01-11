@@ -1,5 +1,5 @@
-resource "aws_iam_user" "smtp" {
-  name = "${local.name}-smtp-user"
+resource "aws_iam_user" "ses" {
+  name = "${local.name}-ses-user"
 }
 
 resource "aws_iam_policy" "send_ses" {
@@ -8,7 +8,7 @@ resource "aws_iam_policy" "send_ses" {
 }
 
 resource "aws_iam_user_policy_attachment" "send_ses" {
-  user       = aws_iam_user.smtp.name
+  user       = aws_iam_user.ses.name
   policy_arn = aws_iam_policy.send_ses.arn
 }
 
