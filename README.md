@@ -10,4 +10,6 @@
 
 - `apilytics-infra` IAM user whose access keys are used in this repo's pipelines.
 
+- `apilytics-smtp-user` IAM user and its SMTP credentials.
+
 - All human-accessed IAM users and all IAM access credentials.

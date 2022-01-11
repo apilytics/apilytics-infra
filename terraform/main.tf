@@ -7,9 +7,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "apilytics-terraform-state"
-    key     = "terraform.tfstate"
-    encrypt = true
+    bucket         = "apilytics-terraform-state"
+    key            = "terraform.tfstate"
+    encrypt        = true
     dynamodb_table = "apilytics-terraform-lock"
   }
 }
