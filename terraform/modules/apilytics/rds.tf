@@ -24,7 +24,7 @@ resource "aws_db_instance" "this" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  name       = "${var.name}-rds-subnet-group"
+  name       = "${var.name}-landing-page-rds-subnet-group"
   subnet_ids = values(aws_subnet.public)[*].id
 
   lifecycle {
