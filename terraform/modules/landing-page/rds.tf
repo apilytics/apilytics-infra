@@ -18,7 +18,7 @@ resource "aws_db_instance" "this" {
   maintenance_window        = "Mon:03:30-Mon:04:00"
   backup_retention_period   = 14
 
-  deletion_protection = true
+  deletion_protection = false
 }
 
 resource "aws_db_instance" "new" {
