@@ -24,10 +24,6 @@ resource "aws_db_instance" "this" {
 }
 
 resource "aws_db_subnet_group" "this" {
-  name       = "${var.name}-landing-page-rds-subnet-group"
+  name       = "${var.name}-landing-page-rds-subnet-group" # Cannot rename this trivially.
   subnet_ids = values(aws_subnet.public)[*].id
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
