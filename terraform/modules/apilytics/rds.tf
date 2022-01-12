@@ -1,5 +1,5 @@
 resource "aws_db_instance" "this" {
-  identifier            = "apilytics-prod-rds"
+  identifier            = "${var.name}-rds"
   name                  = var.postgres_dbname
   engine                = "postgres"
   engine_version        = "12.8"
@@ -15,7 +15,7 @@ resource "aws_db_instance" "this" {
   vpc_security_group_ids = [aws_security_group.this.id]
   publicly_accessible    = true
 
-  final_snapshot_identifier = "apilytics-prod-final-snapshot"
+  final_snapshot_identifier = "${var.name}-final-snapshot"
   backup_window             = "03:00-03:30"
   maintenance_window        = "Mon:03:30-Mon:04:00"
   backup_retention_period   = 14
@@ -26,4 +26,8 @@ resource "aws_db_instance" "this" {
 resource "aws_db_subnet_group" "this" {
   name       = "${var.name}-rds-subnet-group"
   subnet_ids = values(aws_subnet.public)[*].id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }

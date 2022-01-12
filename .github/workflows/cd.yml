@@ -41,6 +41,6 @@ jobs:
       - name: "Terraform apply"
         run: terraform apply -auto-approve -input=false "$TFPLAN"
         env:
-          TF_VAR_landing_page_prod_postgres_dbname: ${{ secrets.TF_VAR_landing_page_prod_postgres_dbname }}
-          TF_VAR_landing_page_prod_postgres_username: ${{ secrets.TF_VAR_landing_page_prod_postgres_username }}
-          TF_VAR_landing_page_prod_postgres_password: ${{ secrets.TF_VAR_landing_page_prod_postgres_password }}
+          TF_VAR_prod_postgres_dbname: ${{ secrets.TF_VAR_prod_postgres_dbname }}
+          TF_VAR_prod_postgres_username: ${{ secrets.TF_VAR_prod_postgres_username }}
+          TF_VAR_prod_postgres_password: ${{ secrets.TF_VAR_prod_postgres_password }}
