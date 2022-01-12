@@ -18,8 +18,8 @@ locals {
   name = "apilytics"
 }
 
-module "landing_page_prod" {
-  source = "./modules/landing-page"
+module "apilytics_prod" {
+  source = "./modules/apilytics"
 
   name = "${local.name}-prod-landing-page"
 

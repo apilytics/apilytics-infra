@@ -1,4 +1,4 @@
-resource "aws_db_instance" "new" {
+resource "aws_db_instance" "this" {
   identifier            = "apilytics-prod-rds"
   name                  = var.postgres_dbname
   engine                = "postgres"
