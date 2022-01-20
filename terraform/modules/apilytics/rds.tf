@@ -12,7 +12,7 @@ resource "aws_db_instance" "this" {
   password              = var.postgres_password
 
   db_subnet_group_name   = aws_db_subnet_group.this.name
-  parameter_group_name   = aws_db_parameter_group.this.name
+  parameter_group_name   = "default.postgres12"
   vpc_security_group_ids = [aws_security_group.this.id]
   publicly_accessible    = true
 
@@ -27,15 +27,4 @@ resource "aws_db_instance" "this" {
 resource "aws_db_subnet_group" "this" {
   name       = "${var.name}-landing-page-rds-subnet-group" # Cannot rename this trivially.
   subnet_ids = values(aws_subnet.public)[*].id
-}
-
-resource "aws_db_parameter_group" "this" {
-  name   = "${var.name}-parameter-group-pg12"
-  family = "postgres12"
-
-  parameter {
-    name         = "max_connections"
-    value        = 164 # Default for the instance class is 82.
-    apply_method = "pending-reboot"
-  }
 }
