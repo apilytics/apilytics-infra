@@ -12,6 +12,7 @@ resource "aws_db_instance" "this" {
   password              = var.postgres_password
 
   db_subnet_group_name   = aws_db_subnet_group.this.name
+  parameter_group_name   = "default.postgres12"
   vpc_security_group_ids = [aws_security_group.this.id]
   publicly_accessible    = true
 
