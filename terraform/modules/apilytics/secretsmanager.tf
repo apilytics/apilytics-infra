@@ -9,3 +9,7 @@ resource "aws_secretsmanager_secret_version" "rds" {
     "password" : var.postgres_password,
   })
 }
+
+data "aws_kms_key" "this" {
+  key_id = "alias/aws/secretsmanager"
+}
