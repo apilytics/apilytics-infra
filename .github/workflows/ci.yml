@@ -60,10 +60,6 @@ jobs:
       - name: "Terraform plan"
         id: plan
         run: terraform plan -no-color -input=false -out="$TFPLAN"
-        env:
-          TF_VAR_prod_postgres_dbname: ${{ secrets.TF_VAR_prod_postgres_dbname }}
-          TF_VAR_prod_postgres_username: ${{ secrets.TF_VAR_prod_postgres_username }}
-          TF_VAR_prod_postgres_password: ${{ secrets.TF_VAR_prod_postgres_password }}
 
       - name: "Store the generated plan in S3"
         run: aws s3 mv "$TFPLAN" s3://apilytics-terraform-state/plans/
