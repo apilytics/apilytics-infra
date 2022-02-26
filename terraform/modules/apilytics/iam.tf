@@ -9,8 +9,8 @@ resource "aws_iam_role" "rds_secret" {
 }
 
 resource "aws_iam_role_policy_attachment" "rds_secret" {
+  role       = aws_iam_role.rds_secret.name
   policy_arn = aws_iam_policy.rds_secret.arn
-  role       = aws_iam_role.rds_secret.arn
 }
 
 data "aws_region" "current" {}

@@ -40,5 +40,5 @@ resource "aws_db_proxy" "this" {
     secret_arn  = aws_secretsmanager_secret.rds.arn
   }
 
-  vpc_security_group_ids = [aws_db_subnet_group.this.name]
+  vpc_security_group_ids = [aws_security_group.this.id]
 }
