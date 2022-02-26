@@ -28,3 +28,17 @@ resource "aws_db_subnet_group" "this" {
   name       = "${var.name}-landing-page-rds-subnet-group" # Cannot rename this trivially.
   subnet_ids = values(aws_subnet.public)[*].id
 }
+
+resource "aws_db_proxy" "this" {
+  name           = "${var.name}-rds-proxy"
+  engine_family  = "POSTGRESQL"
+  role_arn       = aws_iam_role.rds_secret.arn
+  vpc_subnet_ids = aws_db_subnet_group.this.subnet_ids
+
+  auth {
+    auth_scheme = "SECRETS"
+    secret_arn  = aws_secretsmanager_secret.rds.arn
+  }
+
+  vpc_security_group_ids = [aws_db_subnet_group.this.name]
+}
