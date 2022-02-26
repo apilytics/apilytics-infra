@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "rds_secret" {
 
   statement {
     actions   = ["kms:Decrypt"]
-    resources = ["alias/aws/secretsmanager"]
+    resources = [data.aws_kms_key.this.arn]
 
     condition {
       test     = "StringEquals"
