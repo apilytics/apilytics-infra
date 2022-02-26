@@ -42,3 +42,13 @@ resource "aws_db_proxy" "this" {
 
   vpc_security_group_ids = [aws_security_group.this.id]
 }
+
+resource "aws_db_proxy_default_target_group" "this" {
+  db_proxy_name = aws_db_proxy.this.name
+}
+
+resource "aws_db_proxy_target" "this" {
+  db_instance_identifier = aws_db_instance.this.id
+  db_proxy_name          = aws_db_proxy.this.name
+  target_group_name      = aws_db_proxy_default_target_group.this.name
+}
