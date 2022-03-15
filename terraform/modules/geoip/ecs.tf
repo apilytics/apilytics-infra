@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "this" {
     [
       {
         name : local.container_name,
-        image : "${replace(aws_ecr_repository.this.repository_url, "https://", "")}:${data.external.latest_ecr_tag.result}",
+        image : "${replace(aws_ecr_repository.this.repository_url, "https://", "")}:${data.external.latest_ecr_tag.result["tag"]}",
         cpu : data.aws_ec2_instance_type.this.default_vcpus / 2,
         memoryReservation : data.aws_ec2_instance_type.this.memory_size / 2,
         portMappings : [
@@ -68,12 +68,5 @@ data "aws_ec2_instance_type" "this" {
 }
 
 data "external" "latest_ecr_tag" {
-  program = [
-    "aws",
-    "ecr",
-    "describe-images",
-    "--repository-name='${aws_ecr_repository.this.name}'",
-    "--query='sort_by(imageDetails,&imagePushedAt)[-1].imageTags[0]'",
-    "--output=text",
-  ]
+  program = ["${path.root}/../scripts/get_latest_ecr_tag.sh", aws_ecr_repository.this.name]
 }
