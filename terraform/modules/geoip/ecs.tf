@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "this" {
       {
         name : local.container_name,
         image : "${replace(aws_ecr_repository.this.repository_url, "https://", "")}:${data.external.latest_ecr_tag.result["tag"]}",
-        cpu : data.aws_ec2_instance_type.this.default_vcpus / 2,
+        cpu : data.aws_ec2_instance_type.this.default_vcpus * 1024 / 2,
         memoryReservation : data.aws_ec2_instance_type.this.memory_size / 2,
         portMappings : [
           {
