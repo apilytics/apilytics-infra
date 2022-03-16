@@ -1,7 +1,7 @@
 resource "aws_lb" "this" {
   name               = "${var.name}-alb"
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.this.id]
+  security_groups    = [aws_security_group.elb.id]
   subnets            = values(aws_subnet.public)[*].id
 }
 

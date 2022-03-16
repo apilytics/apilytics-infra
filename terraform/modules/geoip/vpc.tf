@@ -51,8 +51,8 @@ resource "aws_route_table_association" "this" {
   route_table_id = aws_route_table.this.id
 }
 
-resource "aws_security_group" "this" {
-  name   = "${var.name}-sg"
+resource "aws_security_group" "elb" {
+  name   = "${var.name}-elb-sg"
   vpc_id = aws_vpc.this.id
 
   ingress {
@@ -60,6 +60,29 @@ resource "aws_security_group" "this" {
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "instance" {
+  name   = "${var.name}-instance-sg"
+  vpc_id = aws_vpc.this.id
+
+  ingress {
+    from_port       = 0
+    to_port         = 65535
+    protocol        = "tcp"
+    security_groups = [aws_security_group.elb.id]
   }
 
   egress {
