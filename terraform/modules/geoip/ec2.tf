@@ -3,7 +3,7 @@ resource "aws_launch_configuration" "this" {
   image_id             = data.aws_ssm_parameter.ecs_ami_id.value
   instance_type        = "t2.micro"
   user_data            = "#!/bin/bash\necho ECS_CLUSTER=${aws_ecs_cluster.this.name} >> /etc/ecs/ecs.config"
-  security_groups      = [aws_security_group.this.id]
+  security_groups      = [aws_security_group.instance.id]
   iam_instance_profile = aws_iam_instance_profile.ecs_instance.id
 
   lifecycle {
