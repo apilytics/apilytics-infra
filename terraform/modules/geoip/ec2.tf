@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "this" {
   name_prefix          = "${var.name}-lc"
-  image_id             = data.aws_ami.amazon_linux_2.id
+  image_id             = data.aws_ssm_parameter.ecs_ami_id.value
   instance_type        = "t2.micro"
   user_data            = "#!/bin/bash\necho ECS_CLUSTER=${aws_ecs_cluster.this.name} >> /etc/ecs/ecs.config"
   security_groups      = [aws_security_group.this.id]
@@ -11,8 +11,6 @@ resource "aws_launch_configuration" "this" {
   }
 }
 
-data "aws_ami" "amazon_linux_2" {
-  owners      = ["amazon"]
-  name_regex  = "^amzn2-ami-kernel-5.10-hvm-2.0.20220310.0-x86_64-gp2$"
-  most_recent = true
+data "aws_ssm_parameter" "ecs_ami_id" {
+  name = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id"
 }
