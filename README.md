@@ -22,3 +22,7 @@
 
 - SES domain verification.
 - Moving out of the SES sandbox by requesting it from AWS support.
+
+#### ACM
+
+- ACM certificate domain verification.
