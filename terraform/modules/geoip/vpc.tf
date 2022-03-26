@@ -18,8 +18,8 @@ resource "aws_internet_gateway" "this" {
 
 resource "aws_subnet" "public" {
   for_each = {
-    for i, cidr_block in var.public_subnet_cidr_blocks :
-    data.aws_availability_zones.available.names[i] => cidr_block
+    for i, zone in data.aws_availability_zones.available.names :
+    zone => cidrsubnet(aws_vpc.this.cidr_block, 8, i + 1) # Start `netnum` from 1 just to match existing infra.
   }
 
   vpc_id                  = aws_vpc.this.id
