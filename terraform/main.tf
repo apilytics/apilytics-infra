@@ -4,6 +4,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "3.70.0"
     }
+
+    external = {
+      source  = "hashicorp/external"
+      version = "2.2.2"
+    }
   }
 
   backend "s3" {
