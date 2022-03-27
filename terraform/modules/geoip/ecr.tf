@@ -1,22 +1,22 @@
 locals {
-  ecr_policy_keep_10 = <<EOF
-{
-  "rules": [
+  ecr_policy_keep_10 = jsonencode(
     {
-      "rulePriority": 1,
-      "description": "Only keep the 10 latest images",
-      "selection": {
-        "tagStatus": "any",
-        "countType": "imageCountMoreThan",
-        "countNumber": 10
-      },
-      "action": {
-        "type": "expire"
-      }
+      rules : [
+        {
+          rulePriority : 1,
+          description : "Only keep the 10 latest images",
+          selection : {
+            tagStatus : "any",
+            countType : "imageCountMoreThan",
+            countNumber : 10
+          },
+          action : {
+            type : "expire"
+          }
+        }
+      ]
     }
-  ]
-}
-EOF
+  )
 }
 
 resource "aws_ecr_repository" "this" {
