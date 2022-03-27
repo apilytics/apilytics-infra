@@ -1,7 +1,3 @@
-locals {
-  container_name = replace(var.name, "-", "_")
-}
-
 resource "aws_ecs_cluster" "this" {
   name = "${var.name}-cluster"
 }
@@ -22,7 +18,7 @@ resource "aws_ecs_service" "this" {
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
     container_name   = local.container_name
-    container_port   = 8000
+    container_port   = local.container_port
   }
 }
 
@@ -38,7 +34,7 @@ resource "aws_ecs_task_definition" "this" {
         memoryReservation : (data.aws_ec2_instance_type.this.memory_size - 64) / 2,
         portMappings : [
           {
-            containerPort : 8000,
+            containerPort : local.container_port,
             protocol : "tcp"
           }
         ],
@@ -64,7 +60,7 @@ resource "aws_ecs_task_definition" "this" {
 data "aws_region" "current" {}
 
 data "aws_ec2_instance_type" "this" {
-  instance_type = aws_launch_configuration.this.instance_type
+  instance_type = local.instance_type
 }
 
 data "external" "latest_ecr_tag" {

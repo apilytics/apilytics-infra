@@ -16,9 +16,14 @@
 
 - `apilytics-infra-user` IAM user whose access keys are used in this repo's pipelines.
 - `apilytics-smtp-user` IAM user and its SMTP credentials.
-- All human-accessed IAM users and all IAM access credentials.
+- All human-accessed IAM users.
+- All IAM access credentials.
 
 #### SES
 
 - SES domain verification.
 - Moving out of the SES sandbox by requesting it from AWS support.
+
+#### ACM
+
+- ACM certificate domain verification.
