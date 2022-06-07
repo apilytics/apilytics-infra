@@ -17,3 +17,9 @@ variable "api_key" {
 variable "vpc_cidr_block" {
   type = string
 }
+
+variable "internal_api_key" {
+  description = "API key that's used to call internal email APIs."
+  type        = string
+  sensitive   = true
+}

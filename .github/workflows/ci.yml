@@ -58,6 +58,7 @@ jobs:
         run: terraform plan -no-color -input=false -out="$TFPLAN"
         env:
           TF_VAR_geoip_prod_api_key: ${{ secrets.TF_VAR_geoip_prod_api_key }}
+          TF_VAR_internal_api_key: ${{ secrets.TF_VAR_internal_api_key }}
 
       - name: "Store the generated plan in S3"
         run: aws s3 mv "$TFPLAN" s3://apilytics-terraform-state/plans/

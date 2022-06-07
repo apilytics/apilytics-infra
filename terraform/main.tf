@@ -26,8 +26,9 @@ locals {
 module "geoip_prod" {
   source = "./modules/geoip"
 
-  name           = "${local.name}-geoip-prod"
-  domain         = "geoip.apilytics.io"
-  api_key        = var.geoip_prod_api_key
-  vpc_cidr_block = "10.0.0.0/16"
+  name             = "${local.name}-geoip-prod"
+  domain           = "geoip.apilytics.io"
+  api_key          = var.geoip_prod_api_key
+  internal_api_key = var.internal_api_key
+  vpc_cidr_block   = "10.0.0.0/16"
 }
