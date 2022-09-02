@@ -1,6 +1,6 @@
 # Apilytics Infra 📈
 
-[![ci](https://github.com/blomqma/apilytics-infra/actions/workflows/ci.yml/badge.svg)](https://github.com/blomqma/apilytics-infra/actions)
+[![ci](https://github.com/apilytics/apilytics-infra/actions/workflows/ci.yml/badge.svg)](https://github.com/apilytics/apilytics-infra/actions)
 
 ### What is managed manually?
 
